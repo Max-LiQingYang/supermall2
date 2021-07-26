@@ -1,6 +1,6 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+  <div class="goods-item" @click="itemClick">
+    <img :src="showImage" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -27,8 +27,36 @@ export default {
   },
   components:{
   },
+  computed: {
+    showImage() {
+      return this.goodsItem.image || this.goodsItem.show.img;
+    }
+  },
   methods:{
-    
+    imageLoad () {
+      /*
+      * 判断是在Home中的图片刷新还是推荐中的图片刷新
+      */
+      
+      //路由方法
+      // if(this.$route.path.indexOf('/home')) {
+      //   this.$bus.$emit('homeItemImgLoad');
+      // } else(this.$route.path.indexOf('/detail')) {
+      //   this.$bus.$emit('detailItemImgLoad');
+      // }
+      
+      //取消全局事件监听方法
+      //在监听该事件的组件中 this.$bus.$off("itemimageLoad", 执行函数)
+      
+
+
+
+      this.$bus.$emit('itemimageLoad');
+    },
+
+    itemClick () {
+      this.$router.push('/detail/' + this.goodsItem.iid);
+    }
   },
   mounted() {
     
