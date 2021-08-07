@@ -31,7 +31,7 @@
       <goods-list :goods="showGoods" />
     </scroll>
 
-    <back-top v-show="showBackTop" @click.native="backClick" />
+    <back-top v-show="isShowBackTop" @click.native="backClick" />
   </div>
 </template>
 
@@ -50,17 +50,12 @@ import { getHomeMultidata, getHomeGoods } from "network/home";
 * 引入外部工具
 */
 import { debounce } from "common/utils.js"
-import { itemListenerMixin } from "common/mixin.js"
+import { itemListenerMixin,backTop } from "common/mixin.js"
 
 /*
  * 引入外部组件
  */
 import Scroll from "components/common/scroll/Scroll";
-
-/*
- * 引入图标
- */
-import BackTop from "components/content/backTop/BackTop";
 
 export default {
   name: "Home",
@@ -72,7 +67,6 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
   data() {
     return {
@@ -84,7 +78,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      showBackTop: false,
       tabOffSetTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -145,18 +138,11 @@ export default {
     },
 
     /*
-     * 监听上升箭头点击
-     */
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0, 300);
-    },
-
-    /*
      * 隐藏上升箭头
      */
     contentScroll(position) {
       //监听位置，显示向上箭头
-      this.showBackTop = position.y < -1000;
+      this.isShowBackTop = position.y < -1000;
 
       //设置
       this.isTabFixed = position.y < -(this.tabOffSetTop);
@@ -179,7 +165,7 @@ export default {
 
   },
 
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin, backTop],
   mounted() {
   },
 
